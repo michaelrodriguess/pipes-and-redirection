@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microdri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: microdri <microdr@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/17 10:15:22 by microdri          #+#    #+#             */
-/*   Updated: 2022/08/17 19:49:26 by microdri         ###   ########.fr       */
+/*   Created: 2022/05/25 09:14:31 by microdri          #+#    #+#             */
+/*   Updated: 2022/05/25 09:14:34 by microdri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include <unistd.h>
-# include "./libft/libft.h"
+#include "libft.h"
 
-#endif
+t_list	*ft_lstlast(t_list *lst)
+{
+	t_list	*no;
+
+	no = lst;
+	while (no)
+	{
+		if (no->next == NULL)
+			return (no);
+		no = no->next;
+	}
+	return (NULL);
+}

@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microdri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: microdri <microdr@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/17 10:15:22 by microdri          #+#    #+#             */
-/*   Updated: 2022/08/17 19:49:26 by microdri         ###   ########.fr       */
+/*   Created: 2022/05/03 12:33:07 by microdri          #+#    #+#             */
+/*   Updated: 2022/05/14 10:28:43 by microdri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include <unistd.h>
-# include "./libft/libft.h"
-
-#endif
+int	ft_isalnum(int c)
+{
+	if ((c < 65 || c > 90) && (c < 97 || c > 122)
+		&& (c < 48 || c > 57))
+		return (0);
+	return (1);
+}

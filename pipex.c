@@ -8,36 +8,63 @@
 
 // testando a funcao pipe conversando com a Funcao Fork.
 
-#include <stdio.h>
-#include <unistd.h>
+#include "pipex.h"
 
-int main(int argc, char **argv)
+void	process_child1(int *fd,char **argv, char **envp)
 {
-	int pipefd[2];
-	int pid;
+	int		fd_arq[2];
+	char	*pathname;
+	char	**args;
 
-	if(pipe(pipefd) == -1)
-	{
-		printf("Ocorreu um erro com a abertura do pipe\n");
+	args = split_args(argv[2]);
+	pathname = find_path(args[0], envp);
+	close(fd[0]);
+	dup2(fd[1], 1);
+	dup2(fd_arq[0], 0);
+	close(fd[1]);
+	execve(pathname, &agv[2], envp);
+}
+
+void	process_child2(int *fd, char **argv, char **envp)
+{
+	int		fd_arq[2];
+	char	*pathname;
+	char	**args;
+	
+	args = split_path(argv[3]);
+	pathname = find_path(args[0], envp);
+	close(fd[1]);
+	dup2(fd[0], 0);
+	dup2(fd_arq[1], 1);
+	close(fd[0]);
+	execve(pathname, &argv[3], envp);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	int fd[2];
+	int pid1;
+	int pid2;
+
+	if(pipe(fd) == -1)
 		return (1);
-	}
-	pid = fork();
-	if (pid == 0)
+	pid1 = fork();
+	if (pid1 == -1)
+		return (2);
+	if (pid1 == 0)
 	{
-		close(pipefd[0]);
-		int x;
-		printf("input a number: ");
-		scanf("%d", &x);
-		write(pipefd[1], &x, sizeof(int));
-		close(pipefd[1]);
-	}
-	else 
+		process_child1(fd, argv, envp);
+	} else
+		waitpid(pid1, &pid1, 0);
+	pid2 = fork();
+	if (pid2 == -1)
+		return (2);
+	if (pid2 == 0)
 	{
-		close(pipefd[1]);
-		int y;
-		read(pipefd[0], &y, sizeof(int));
-		close(pipefd[0]);
-		printf("Esse dados veio do processo filho -> %d\n", y);
-	}
+		process_father(fd, argv, envp);
+	} else
+		waitpid(pid2, &pid2, 0)
+	
 	return (0);
 }
+
