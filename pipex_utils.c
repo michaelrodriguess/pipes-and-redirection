@@ -6,11 +6,11 @@
 /*   By: microdri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:40:31 by microdri          #+#    #+#             */
-/*   Updated: 2022/08/17 19:49:28 by microdri         ###   ########.fr       */
+/*   Updated: 2022/08/19 19:38:29 by microdri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
+#include "pipex.h"
 
 static char	**matriz_path(char **envp)
 {
@@ -20,24 +20,25 @@ static char	**matriz_path(char **envp)
 	
 	env = NULL;
 	matriz = NULL;
-	i = 0;
+	index = 0;
 	while(envp[index])
 	{
-		if (ft_strncmp("PATH=", envp[index], 5));
+		if (ft_strncmp("PATH=", envp[index], 5))
 		{
-			env = ft_strdup(&envp[i][5]);
+			env = ft_strdup(&envp[index][5]);
 			break ;
 		}
-		i++;
+		index++;
 	}
 	matriz = ft_split(env, ':');
 	return (matriz);
 }
 
-char	*find_path(char *cmd, char **envp)
+char	*find_path(char **cmd, char **envp)
 {
 	int 	i;
-	char	pathname;
+	char	*pathname;
+	char	*path_temp;
 	char	**matriz;
 
 	i = 0;
@@ -46,9 +47,11 @@ char	*find_path(char *cmd, char **envp)
 	while (matriz[i])
 	{
 		pathname = ft_strjoin(matriz[i], "/");
-		pathname = ft_strjoin(pathname, cmd);
-		if (access(pathname, X_OK) == 0)
-			return (pathname);
+		path_temp = ft_strjoin(pathname, cmd[0]);
+		if (access(path_temp, X_OK) == 0)
+			return (path_temp);
+		else
+			free(pathname);	
 		i++;
 	}
 	return (NULL);

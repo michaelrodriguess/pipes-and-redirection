@@ -12,32 +12,34 @@
 
 void	process_child1(int *fd,char **argv, char **envp)
 {
-	int		fd_arq[2];
+	int		fd_arq;
 	char	*pathname;
 	char	**args;
 
 	args = split_args(argv[2]);
-	pathname = find_path(args[0], envp);
+	pathname = find_path(args, envp);
 	close(fd[0]);
+	fd_arq = open(argv[1], O_RDONLY);
 	dup2(fd[1], 1);
-	dup2(fd_arq[0], 0);
+	dup2(fd_arq, 0);
 	close(fd[1]);
-	execve(pathname, &agv[2], envp);
+	execve(pathname, args, NULL);
 }
 
 void	process_child2(int *fd, char **argv, char **envp)
 {
-	int		fd_arq[2];
+	int		fd_arq;
 	char	*pathname;
 	char	**args;
 	
-	args = split_path(argv[3]);
-	pathname = find_path(args[0], envp);
+	args = split_args(argv[3]);
+	pathname = find_path(args, envp);
 	close(fd[1]);
+	fd_arq = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	dup2(fd[0], 0);
-	dup2(fd_arq[1], 1);
+	dup2(fd_arq, 1);
 	close(fd[0]);
-	execve(pathname, &argv[3], envp);
+	execve(pathname, args, NULL);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -46,25 +48,20 @@ int main(int argc, char **argv, char **envp)
 	int pid1;
 	int pid2;
 
-	if(pipe(fd) == -1)
+	if (pipe(fd) == -1)
 		return (1);
 	pid1 = fork();
 	if (pid1 == -1)
 		return (2);
-	if (pid1 == 0)
-	{
+	else if (pid1 == 0)
 		process_child1(fd, argv, envp);
-	} else
-		waitpid(pid1, &pid1, 0);
 	pid2 = fork();
 	if (pid2 == -1)
 		return (2);
-	if (pid2 == 0)
-	{
-		process_father(fd, argv, envp);
-	} else
-		waitpid(pid2, &pid2, 0)
-	
+	else if (pid2 == 0)
+		process_child2(fd, argv, envp);
+	waitpid(pid1, &pid1, 0);
+	waitpid(pid2, &pid2, 0);
 	return (0);
 }
 

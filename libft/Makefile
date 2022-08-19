@@ -55,8 +55,8 @@ LIBC	= ar -rcs
 .c.o:
 		$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I .
 
-$(NAME):	$(OBJS) $(OBJSB)	
-		$(LIBC) $(NAME) $(OBJS) $(OBJSB)
+$(NAME):	$(OBJS)	
+		$(LIBC) $(NAME) $(OBJS) 
 
 all:	$(NAME)
 
@@ -69,9 +69,8 @@ fclean:	clean
 
 re:	fclean all
 
-bonus:	$(NAME)
-		$(CC) $(CFLAGS) -c $(SRCSB)
-		ar -qs $(NAME) $(OBJSB)
+bonus:	$(NAME) $(OBJSB)
+		ar -qs $(NAME) $(OBJS) $(OBJSB) 
 
 .PHONY:	all clean fclean re bonus
 
