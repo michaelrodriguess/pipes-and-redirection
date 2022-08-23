@@ -6,7 +6,7 @@
 /*   By: microdri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:40:31 by microdri          #+#    #+#             */
-/*   Updated: 2022/08/22 18:25:44 by microdri         ###   ########.fr       */
+/*   Updated: 2022/08/23 17:23:32 by microdri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,3 +61,4 @@ char	**split_args(char *cmd)
 	args = ft_split(cmd, ' ');
 	return (args);
 }
+
